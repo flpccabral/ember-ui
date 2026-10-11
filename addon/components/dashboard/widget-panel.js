@@ -4,6 +4,7 @@ import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { task } from 'ember-concurrency';
 import { ExtensionComponent } from '@fleetbase/ember-core/contracts';
+import translateLabel from '../../utils/translate-label';
 
 const TAB_ALL = 'all';
 const TAB_DEFAULT = 'default';
@@ -25,6 +26,7 @@ const TAB_ADDED = 'added';
 export default class DashboardWidgetPanelComponent extends Component {
     @service('universe/widget-service') widgetService;
     @service notifications;
+    @service intl;
 
     @tracked searchQuery = '';
     @tracked activeTab = TAB_ALL;
@@ -61,8 +63,9 @@ export default class DashboardWidgetPanelComponent extends Component {
         const q = this.searchQuery.toLowerCase().trim();
         const matchesSearch = (w) => {
             if (!q) return true;
-            const name = (w.name ?? '').toLowerCase();
-            const desc = (w.description ?? '').toLowerCase();
+            // Names and descriptions may be translation keys; match the displayed text.
+            const name = `${translateLabel(this.intl, w.name) ?? ''}`.toLowerCase();
+            const desc = `${translateLabel(this.intl, w.description) ?? ''}`.toLowerCase();
             const cat = (w.category ?? '').toLowerCase();
             return name.includes(q) || desc.includes(q) || cat.includes(q);
         };

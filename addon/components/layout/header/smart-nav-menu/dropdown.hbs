@@ -28,15 +28,15 @@
     class="snm-dropdown snm-dropdown--wide"
     style={{this.positionStyle}}
     role="dialog"
-    aria-label="More extensions"
+    aria-label={{t "smart-nav-menu.more-extensions"}}
 >
     {{! ── Header: title + close ────────────────────────────────────────────── }}
     <div class="snm-dropdown-header">
-        <span class="snm-dropdown-title">Extensions</span>
+        <span class="snm-dropdown-title">{{t "smart-nav-menu.extensions"}}</span>
         <button
             type="button"
             class="snm-dropdown-close"
-            aria-label="Close"
+            aria-label={{t "common.close"}}
             {{on "click" (or @onClose (noop))}}
         >
             <FaIcon @icon="xmark" @size="sm" />
@@ -51,16 +51,16 @@
         <input
             type="text"
             class="snm-dropdown-search-input"
-            placeholder="Search extensions..."
+            placeholder={{t "smart-nav-menu.search-extensions-placeholder"}}
             value={{this.searchQuery}}
-            aria-label="Search extensions"
+            aria-label={{t "smart-nav-menu.search-extensions"}}
             {{on "input" this.updateSearch}}
         />
         {{#if this.searchQuery}}
             <button
                 type="button"
                 class="snm-dropdown-search-clear"
-                aria-label="Clear search"
+                aria-label={{t "smart-nav-menu.clear-search"}}
                 {{on "click" this.clearSearch}}
             >
                 <FaIcon @icon="xmark" @size="xs" />
@@ -69,12 +69,12 @@
     </div>
 
     {{! ── Card grid ───────────────────────────────────────────────────────── }}
-    <div class="snm-dropdown-grid" aria-label="Extension list">
+    <div class="snm-dropdown-grid" aria-label={{t "smart-nav-menu.extension-list"}}>
         {{#if this.hasNoResults}}
             <div class="snm-dropdown-empty">
                 <FaIcon @icon="magnifying-glass" @size="lg" class="snm-dropdown-empty-icon" />
                 <p class="snm-dropdown-empty-text">
-                    No extensions match
+                    {{t "smart-nav-menu.no-extensions-match"}}
                     <strong>{{this.searchQuery}}</strong>
                 </p>
             </div>
@@ -87,7 +87,7 @@
                             @route={{item.route}}
                             id={{concat (dasherize (or item.route item.id "sc")) "-dropdown-card"}}
                             class="snm-dropdown-card"
-                            title={{item.title}}
+                            title={{translate-label item.title}}
                         >
                             <div class="snm-dropdown-card-header">
                                 <span class="snm-dropdown-card-icon">
@@ -98,24 +98,24 @@
                                     {{/if}}
                                 </span>
                                 <span class="snm-dropdown-card-title-group">
-                                    <span class="snm-dropdown-card-title">{{item.title}}</span>
+                                    <span class="snm-dropdown-card-title">{{translate-label item.title}}</span>
                                     {{#if item._parentTitle}}
-                                        <span class="snm-dropdown-card-parent-label" aria-label="from {{item._parentTitle}}">· {{item._parentTitle}}</span>
+                                        <span class="snm-dropdown-card-parent-label" aria-label={{t "smart-nav-menu.from-parent" parent=(translate-label item._parentTitle)}}>· {{translate-label item._parentTitle}}</span>
                                     {{/if}}
                                 </span>
                             </div>
                             {{#if item.description}}
-                                <p class="snm-dropdown-card-description">{{item.description}}</p>
+                                <p class="snm-dropdown-card-description">{{translate-label item.description}}</p>
                             {{else if item._parentTitle}}
-                                <p class="snm-dropdown-card-description snm-dropdown-card-description--from"><em>from {{item._parentTitle}}</em></p>
+                                <p class="snm-dropdown-card-description snm-dropdown-card-description--from"><em>{{t "smart-nav-menu.from-parent" parent=(translate-label item._parentTitle)}}</em></p>
                             {{/if}}
                         </LinkToExternal>
                         {{#unless @atPinnedLimit}}
                             <button
                                 type="button"
                                 class="snm-dropdown-pin-btn"
-                                title="Pin to navigation bar"
-                                aria-label="Pin {{item.title}} to navigation bar"
+                                title={{t "smart-nav-menu.pin-to-bar"}}
+                                aria-label={{t "smart-nav-menu.pin-item-to-bar" title=(translate-label item.title)}}
                                 {{on "click" (fn (or @onQuickPin (noop)) item)}}
                             >
                                 <FaIcon @icon="thumbtack" @size="xs" />
@@ -129,7 +129,7 @@
                             <a
                                 href="javascript:;"
                                 class="snm-dropdown-card"
-                                title={{item.title}}
+                                title={{translate-label item.title}}
                                 {{on "click" (fn this.handleItemClick item)}}
                             >
                                 <div class="snm-dropdown-card-header">
@@ -141,14 +141,14 @@
                                         {{/if}}
                                     </span>
                                     <span class="snm-dropdown-card-title-group">
-                                        <span class="snm-dropdown-card-title">{{item.title}}</span>
+                                        <span class="snm-dropdown-card-title">{{translate-label item.title}}</span>
                                         {{#if item._parentTitle}}
-                                            <span class="snm-dropdown-card-parent-label" aria-label="from {{item._parentTitle}}">· {{item._parentTitle}}</span>
+                                            <span class="snm-dropdown-card-parent-label" aria-label={{t "smart-nav-menu.from-parent" parent=(translate-label item._parentTitle)}}>· {{translate-label item._parentTitle}}</span>
                                         {{/if}}
                                     </span>
                                 </div>
                                 {{#if item.description}}
-                                    <p class="snm-dropdown-card-description">{{item.description}}</p>
+                                    <p class="snm-dropdown-card-description">{{translate-label item.description}}</p>
                                 {{/if}}
                             </a>
                         {{else}}
@@ -156,7 +156,7 @@
                                 @route={{item.route}}
                                 id={{concat (dasherize (or item.route item.id "nav")) "-dropdown-card"}}
                                 class="snm-dropdown-card"
-                                title={{item.title}}
+                                title={{translate-label item.title}}
                             >
                                 <div class="snm-dropdown-card-header">
                                     <span class="snm-dropdown-card-icon">
@@ -167,14 +167,14 @@
                                         {{/if}}
                                     </span>
                                     <span class="snm-dropdown-card-title-group">
-                                        <span class="snm-dropdown-card-title">{{item.title}}</span>
+                                        <span class="snm-dropdown-card-title">{{translate-label item.title}}</span>
                                         {{#if item._parentTitle}}
-                                            <span class="snm-dropdown-card-parent-label" aria-label="from {{item._parentTitle}}">· {{item._parentTitle}}</span>
+                                            <span class="snm-dropdown-card-parent-label" aria-label={{t "smart-nav-menu.from-parent" parent=(translate-label item._parentTitle)}}>· {{translate-label item._parentTitle}}</span>
                                         {{/if}}
                                     </span>
                                 </div>
                                 {{#if item.description}}
-                                    <p class="snm-dropdown-card-description">{{item.description}}</p>
+                                    <p class="snm-dropdown-card-description">{{translate-label item.description}}</p>
                                 {{/if}}
                             </LinkToExternal>
                         {{/if}}
@@ -182,8 +182,8 @@
                             <button
                                 type="button"
                                 class="snm-dropdown-pin-btn"
-                                title="Pin to navigation bar"
-                                aria-label="Pin {{item.title}} to navigation bar"
+                                title={{t "smart-nav-menu.pin-to-bar"}}
+                                aria-label={{t "smart-nav-menu.pin-item-to-bar" title=(translate-label item.title)}}
                                 {{on "click" (fn (or @onQuickPin (noop)) item)}}
                             >
                                 <FaIcon @icon="thumbtack" @size="xs" />
@@ -203,7 +203,7 @@
             {{on "click" (or @onOpenCustomizer (noop))}}
         >
             <FaIcon @icon="sliders" @size="xs" class="mr-1.5" />
-            Customise navigation
+            {{t "smart-nav-menu.customise-navigation"}}
         </button>
     </div>
 </div>

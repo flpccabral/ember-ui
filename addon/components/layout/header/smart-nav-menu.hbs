@@ -14,7 +14,7 @@
 <div
     class="snm-container flex items-center"
     role="menubar"
-    aria-label="Extension navigation"
+    aria-label={{t "smart-nav-menu.extension-navigation"}}
     {{did-insert this.setupContainer}}
     ...attributes
 >
@@ -30,8 +30,8 @@
             class="snm-more-btn next-view-header-item {{if this.isMoreOpen 'is-open'}}"
             aria-haspopup="true"
             aria-expanded={{if this.isMoreOpen "true" "false"}}
-            aria-label="More extensions"
-            title="More extensions"
+            aria-label={{t "smart-nav-menu.more-extensions"}}
+            title={{t "smart-nav-menu.more-extensions"}}
             {{did-insert this.registerMoreBtn}}
             {{on "click" this.toggleMore}}
         >
@@ -44,8 +44,8 @@
         <button
             type="button"
             class="snm-customise-btn next-view-header-item ml-0.5"
-            title="Customise navigation"
-            aria-label="Customise navigation"
+            title={{t "smart-nav-menu.customise-navigation"}}
+            aria-label={{t "smart-nav-menu.customise-navigation"}}
             {{on "click" this.openCustomizer}}
         >
             <FaIcon @icon="sliders" @size="sm" />

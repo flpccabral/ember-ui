@@ -113,7 +113,7 @@ module('Integration | Component | layout/header/smart-nav-menu', function (hooks
             await render(TEMPLATE);
 
             assert.dom('.snm-container').hasAttribute('role', 'menubar');
-            assert.dom('.snm-container').hasAttribute('aria-label', 'Extension navigation');
+            assert.dom('.snm-container').hasAttribute('aria-label', 'smart-nav-menu.extension-navigation');
         });
 
         test('with no items neither the more nor customise button renders', async function (assert) {

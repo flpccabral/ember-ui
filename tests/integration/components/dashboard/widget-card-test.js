@@ -129,8 +129,8 @@ module('Integration | Component | dashboard/widget-card', function (hooks) {
 
             await render(TEMPLATE);
 
-            assert.dom(CARD).includesText('Added');
-            assert.dom(CARD).doesNotIncludeText('×', 'a single copy needs no count');
+            assert.dom(CARD).includesText('dashboard-widget-panel.added');
+            assert.dom(CARD).doesNotIncludeText('dashboard-widget-panel.added-count', 'a single copy needs no count');
             assert.dom(CARD).hasClass('border-sky-300/70', 'and the card border marks it');
         });
 
@@ -139,7 +139,10 @@ module('Integration | Component | dashboard/widget-card', function (hooks) {
 
             await render(TEMPLATE);
 
-            assert.dom(CARD).includesText('Added ×3');
+            assert.dom(CARD).includesText('dashboard-widget-panel.added-count');
+            const intl = this.owner.lookup('service:intl');
+            const call = intl.calls.find((c) => c.method === 't' && c.args[0] === 'dashboard-widget-panel.added-count');
+            assert.deepEqual(call.args[1], { count: 3 }, 'the count is passed to the translation');
         });
 
         test('an added count of zero is treated as not added', async function (assert) {

@@ -78,7 +78,7 @@ module('Unit | Service | dashboard', function (hooks) {
         this.owner.register('service:store', this.store, { instantiate: false });
         this.owner.register('service:fetch', {}, { instantiate: false });
         this.owner.register('service:notifications', {}, { instantiate: false });
-        this.owner.register('service:intl', { t: (k) => k }, { instantiate: false });
+        this.owner.register('service:intl', { t: (k) => k, exists: () => false }, { instantiate: false });
         this.owner.register('service:universe', new StubUniverse(), { instantiate: false });
         // The addon ships a real universe/widget-service; it must be unregistered before a
         // stub can take its place, otherwise the resolver-provided one is used.
@@ -125,6 +125,34 @@ module('Unit | Service | dashboard', function (hooks) {
         firstBatch.forEach((r) => assert.ok(r.options.widget_key, 'widget_key is stashed in options'));
         assert.strictEqual(firstBatch[0].options.widget_key, 'fleet-ops-kpi-earnings-widget');
         assert.strictEqual(firstBatch[1].options.widget_key, 'fleet-ops-revenue-trend-widget');
+    });
+
+    test('default widgets registered with translation keys store the English text', function (assert) {
+        const messages = {
+            'ledger.extension.widgets.kpi-revenue.name': 'Revenue',
+            'ledger.extension.widgets.kpi-revenue.description': 'Total revenue for the current period with comparison.',
+        };
+        const intl = this.owner.lookup('service:intl');
+        intl.exists = (key, locale) => locale === 'en-us' && key in messages;
+        intl.t = (key, options) => (options?.locale === 'en-us' ? messages[key] : key);
+
+        this.widgetService.widgets = [
+            {
+                id: 'ledger-kpi-revenue',
+                name: 'ledger.extension.widgets.kpi-revenue.name',
+                description: 'ledger.extension.widgets.kpi-revenue.description',
+                component: 'widget/kpi-revenue',
+                grid_options: { w: 3, h: 4 },
+                default: true,
+            },
+            { id: 'fleet-ops-kpi-earnings-widget', name: 'Earnings', component: 'widget/kpi-earnings', grid_options: { w: 3, h: 6 }, default: true },
+        ];
+
+        const [keyed, plain] = this.owner.lookup('service:dashboard')._createDefaultDashboardWidgets('dashboard');
+
+        assert.strictEqual(keyed.name, 'Revenue', 'the key is stored as its English text');
+        assert.strictEqual(keyed.description, 'Total revenue for the current period with comparison.');
+        assert.strictEqual(plain.name, 'Earnings', 'plain text names are stored unchanged');
     });
 
     test('it loads multiple system dashboards for a slot and selects the configured slot default', async function (assert) {
@@ -226,7 +254,7 @@ module('Unit | Service | dashboard selection and lifecycle', function (hooks) {
         this.owner.register('service:store', this.store, { instantiate: false });
         this.owner.register('service:fetch', this.fetch, { instantiate: false });
         this.owner.register('service:notifications', this.notifications, { instantiate: false });
-        this.owner.register('service:intl', { t: (key, values) => `${key}:${values?.dashboardName ?? ''}` }, { instantiate: false });
+        this.owner.register('service:intl', { t: (key, values) => `${key}:${values?.dashboardName ?? ''}`, exists: () => false }, { instantiate: false });
         this.owner.register('service:universe', new StubUniverse(), { instantiate: false });
         this.owner.unregister('service:universe/widget-service');
         this.owner.register('service:universe/widget-service', this.widgetService, { instantiate: false });

@@ -70,7 +70,11 @@ module('Integration | Component | dashboard/widget-panel', function (hooks) {
 
         const earningsCard = this.element.querySelector('[data-widget-key="fleet-ops-kpi-earnings-widget"]');
         assert.ok(earningsCard, 'earnings card rendered');
-        assert.ok(earningsCard.textContent.includes('×2'), 'shows "On dashboard ×2" because the widget appears twice');
+        assert.ok(earningsCard.textContent.includes('dashboard-widget-panel.added-count'), 'shows the "Added ×N" badge because the widget appears twice');
+        assert.ok(
+            this.owner.lookup('service:intl').calls.some((c) => c.args[0] === 'dashboard-widget-panel.added-count' && c.args[1]?.count === 2),
+            'with a count of two'
+        );
 
         const distanceCard = this.element.querySelector('[data-widget-key="fleet-ops-kpi-distance-widget"]');
         assert.notOk(distanceCard.textContent.includes('On dashboard'), 'unrelated widget does not show added badge');
@@ -234,7 +238,11 @@ module('Integration | Component | dashboard/widget-panel', function (hooks) {
             await waitFor('.dashboard-widget-card');
 
             const earningsCard = this.element.querySelector('[data-widget-key="fleet-ops-kpi-earnings-widget"]');
-            assert.ok(earningsCard.textContent.includes('\u00d72'), 'the keyless entries are ignored');
+            assert.ok(earningsCard.textContent.includes('dashboard-widget-panel.added-count'), 'the keyless entries are ignored');
+            assert.ok(
+                this.owner.lookup('service:intl').calls.some((c) => c.args[0] === 'dashboard-widget-panel.added-count' && c.args[1]?.count === 2),
+                'so the count stays at two'
+            );
 
             const tabCounts = Array.from(this.element.querySelectorAll('.flex.rounded-md button span:last-child')).map((node) => node.textContent.trim());
             assert.strictEqual(tabCounts[2], '1', 'and the On Dashboard tab counts one distinct widget');

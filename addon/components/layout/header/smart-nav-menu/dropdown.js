@@ -3,6 +3,8 @@ import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { isArray } from '@ember/array';
 import { htmlSafe } from '@ember/template';
+import { inject as service } from '@ember/service';
+import translateLabel from '../../../../utils/translate-label';
 
 /**
  * Layout::Header::SmartNavMenu::Dropdown
@@ -15,6 +17,7 @@ import { htmlSafe } from '@ember/template';
  * (muted style, no pin button).
  */
 export default class LayoutHeaderSmartNavMenuDropdownComponent extends Component {
+    @service intl;
     @tracked searchQuery = '';
 
     get positionStyle() {
@@ -41,10 +44,12 @@ export default class LayoutHeaderSmartNavMenuDropdownComponent extends Component
         if (!query) {
             return this.expandedItems;
         }
+        // Titles may be translation keys, so match against the displayed text.
+        const text = (value) => `${translateLabel(this.intl, value) ?? ''}`.toLowerCase();
         return this.expandedItems.filter((item) => {
-            if ((item.title || '').toLowerCase().includes(query)) return true;
-            if (item.description && item.description.toLowerCase().includes(query)) return true;
-            if (item._parentTitle && item._parentTitle.toLowerCase().includes(query)) return true;
+            if (text(item.title).includes(query)) return true;
+            if (item.description && text(item.description).includes(query)) return true;
+            if (item._parentTitle && text(item._parentTitle).includes(query)) return true;
             // Match against any of the item's tags
             if (isArray(item.tags) && item.tags.some((t) => t.toLowerCase().includes(query))) return true;
             return false;

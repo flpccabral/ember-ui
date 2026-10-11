@@ -350,8 +350,24 @@ export default class DashboardService extends Service {
         const { id: widgetKey, default: _isDefault, ...rest } = definition;
         return this.store.createRecord('dashboard-widget', {
             ...rest,
+            name: this._storedLabel(rest.name),
+            description: this._storedLabel(rest.description),
             options: { ...(rest.options ?? {}), widget_key: widgetKey },
         });
+    }
+
+    /**
+     * Widget definitions may register translation keys as their name and
+     * description. Persist the English text instead of the key, as was stored
+     * before keys were supported; the picker translates from the registry.
+     * @private
+     */
+    _storedLabel(value) {
+        if (typeof value !== 'string' || !this.intl.exists(value, 'en-us')) {
+            return value;
+        }
+
+        return this.intl.t(value, { locale: 'en-us' });
     }
 
     /**

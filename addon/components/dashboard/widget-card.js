@@ -1,4 +1,5 @@
 import Component from '@glimmer/component';
+import { inject as service } from '@ember/service';
 
 /**
  * Single card in the widget picker.
@@ -8,6 +9,8 @@ import Component from '@glimmer/component';
  *                          @onHover={{fn}} @onUnhover={{fn}} />
  */
 export default class DashboardWidgetCardComponent extends Component {
+    @service intl;
+
     get isAdded() {
         return (this.args.addedCount ?? 0) > 0;
     }
@@ -33,7 +36,7 @@ export default class DashboardWidgetCardComponent extends Component {
      */
     get addedShortBadge() {
         const n = this.args.addedCount;
-        return n > 1 ? `Added ×${n}` : 'Added';
+        return n > 1 ? this.intl.t('dashboard-widget-panel.added-count', { count: n }) : this.intl.t('dashboard-widget-panel.added');
     }
 
     /** Subtle Tailwind chip colour driven by the registry `category`. */

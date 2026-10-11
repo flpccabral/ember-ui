@@ -97,7 +97,7 @@ module('Integration | Component | layout/header/smart-nav-menu/customizer', func
             await render(TEMPLATE);
 
             assert.deepEqual(pinnedTitles(), []);
-            assert.dom('.snm-customizer-empty-state').containsText('No extensions pinned yet.');
+            assert.dom('.snm-customizer-empty-state').containsText('smart-nav-menu.no-extensions-pinned');
         });
 
         test('it renders with no arguments at all', async function (assert) {
@@ -124,8 +124,8 @@ module('Integration | Component | layout/header/smart-nav-menu/customizer', func
 
             await render(TEMPLATE);
 
-            assert.dom(allItem('Fleet Ops')).hasAttribute('title', 'Click to unpin');
-            assert.dom(allItem('Storefront')).hasAttribute('title', 'Click to pin to bar');
+            assert.dom(allItem('Fleet Ops')).hasAttribute('title', 'smart-nav-menu.click-to-unpin');
+            assert.dom(allItem('Storefront')).hasAttribute('title', 'smart-nav-menu.click-to-pin');
         });
 
         test('an extension nested under a parent shows the parent name', async function (assert) {

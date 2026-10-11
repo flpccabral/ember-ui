@@ -17,7 +17,7 @@
         id={{concat (dasherize (or @item.route @item.id "nav")) "-header-button"}}
         role="menuitem"
         class="snm-item next-view-header-item truncate {{@item.class}} {{if this.isActive 'active'}}"
-        title={{@item.title}}
+        title={{translate-label @item.title}}
         {{on "click" @item.onClick}}
     >
         <div class="w-6 flex-shrink-0">
@@ -27,7 +27,7 @@
                 <FaIcon @icon={{or @item.icon "circle-dot"}} @prefix={{@item.iconPrefix}} @size="sm" />
             {{/if}}
         </div>
-        <span class="truncate">{{@item.title}}</span>
+        <span class="truncate">{{translate-label @item.title}}</span>
     </a>
 {{else}}
     <LinkToExternal
@@ -35,7 +35,7 @@
         id={{concat (dasherize (or @item.route @item.id "nav")) "-header-button"}}
         class="snm-item next-view-header-item truncate {{@item.class}} {{if this.isActive 'active'}}"
         role="menuitem"
-        title={{@item.title}}
+        title={{translate-label @item.title}}
     >
         <div class="w-6 flex-shrink-0">
             {{#if @item.iconComponent}}
@@ -44,6 +44,6 @@
                 <FaIcon @icon={{or @item.icon "circle-dot"}} @prefix={{@item.iconPrefix}} @size="sm" />
             {{/if}}
         </div>
-        <span class="truncate">{{@item.title}}</span>
+        <span class="truncate">{{translate-label @item.title}}</span>
     </LinkToExternal>
 {{/if}}
