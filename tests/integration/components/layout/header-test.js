@@ -26,6 +26,25 @@ class MobileMediaStub extends Service.extend(Evented) {
 const ORG_TRIGGER = '.next-header-menu-item-dd .next-org-button-trigger';
 const USER_TRIGGER = '.next-user-button-trigger';
 
+// The header translates its menu labels; answer those keys with the English text the assertions
+// below expect and leave every other key to the real intl service.
+const HEADER_TEXT = {
+    'layout.header.menus.organization.home': 'Home',
+    'layout.header.menus.organization.settings': 'Organization settings',
+    'layout.header.menus.organization.create-or-join': 'Create or join organizations',
+    'layout.header.menus.organization.explore-extensions': 'Explore extensions',
+    'layout.header.menus.organization.admin': 'Admin',
+    'layout.header.menus.logout': 'Logout',
+    'layout.header.menus.user.view-profile': 'View Profile',
+    'layout.header.menus.user.keyboard-shortcuts': 'Show keyboard shortcuts',
+    'layout.header.menus.user.changelog': 'Changelog',
+    'layout.header.menus.user.developers': 'Developers',
+    'layout.header.menus.user.discord': 'Join Discord Community',
+    'layout.header.menus.user.support': 'Help & Support',
+    'layout.header.menus.user.documentation': 'Documentation',
+    'layout.header.menus.user.documentation-title': 'Fleetbase Documentation',
+};
+
 function menuTexts() {
     return findAll('.next-header-menu-item-dd-content .next-dd-item, .next-header-menu-item-dd-content .next-header-dd-menu-item').map((item) => item.textContent.trim());
 }
@@ -53,6 +72,10 @@ module('Integration | Component | layout/header', function (hooks) {
 
         // hasExtension() reads the application's extension registry.
         getOwner(this).application.extensions = [];
+
+        const intl = this.owner.lookup('service:intl');
+        const translate = intl.t.bind(intl);
+        intl.t = (key, options) => HEADER_TEXT[key] ?? translate(key, options);
     });
 
     module('rendering', function () {

@@ -1,4 +1,4 @@
-import Service from '@ember/service';
+import Service, { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { getOwner } from '@ember/application';
@@ -10,6 +10,8 @@ const DOCS_EMBED_SOURCE = 'console';
 const SUPPORTED_THEMES = ['light', 'dark'];
 
 export default class DocsPanelService extends Service {
+    @service intl;
+
     @tracked isOpen = false;
     @tracked url = null;
     @tracked title = 'Documentation';
@@ -47,7 +49,7 @@ export default class DocsPanelService extends Service {
     open(url, options = {}) {
         this.iframeTheme = this.resolveTheme(options.theme);
         this.url = this.normalizeUrl(url, { theme: this.iframeTheme });
-        this.title = options.title ?? 'Documentation';
+        this.title = options.title ?? this.intl.t('docs-panel.documentation');
         this.source = options.source ?? null;
         this.iframeFailed = false;
         this.isIframeLoading = this.canEmbed;

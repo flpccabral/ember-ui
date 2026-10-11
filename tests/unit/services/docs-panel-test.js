@@ -4,6 +4,13 @@ import { setupTest } from 'dummy/tests/helpers';
 module('Unit | Service | docs-panel', function (hooks) {
     setupTest(hooks);
 
+    hooks.beforeEach(function () {
+        // The fallback title is translated; answer its key with the English text asserted below.
+        const intl = this.owner.lookup('service:intl');
+        const translate = intl.t.bind(intl);
+        intl.t = (key, options) => (key === 'docs-panel.documentation' ? 'Documentation' : translate(key, options));
+    });
+
     // Every other test calls open() first, which assigns all of these — this is the only look at
     // the service before anything has happened to it.
     test('a freshly looked-up service starts closed and empty', function (assert) {
