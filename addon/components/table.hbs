@@ -78,7 +78,7 @@
                                             <FaIcon @icon={{@emptyStateIcon}} @prefix={{@emptyStateIconPrefix}} />
                                         </div>
                                     {{/if}}
-                                    <div class="next-table-empty-state-title">{{or @emptyStateTitle "No records found"}}</div>
+                                    <div class="next-table-empty-state-title">{{or @emptyStateTitle (t "table.empty-state.no-records-found")}}</div>
                                     {{#if @emptyStateDescription}}
                                         <div class="next-table-empty-state-description">{{@emptyStateDescription}}</div>
                                     {{/if}}

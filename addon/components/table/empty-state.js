@@ -5,6 +5,7 @@ import window from 'ember-window-mock';
 
 export default class TableEmptyStateComponent extends Component {
     @service docsPanel;
+    @service intl;
 
     get isCompact() {
         return this.args.variant === 'compact';
@@ -21,7 +22,7 @@ export default class TableEmptyStateComponent extends Component {
             return this.args.filteredTitle;
         }
 
-        return this.args.title ?? 'No records yet';
+        return this.args.title ?? this.intl.t('table.empty-state.no-records-yet');
     }
 
     get description() {
@@ -61,12 +62,12 @@ export default class TableEmptyStateComponent extends Component {
     }
 
     get docsText() {
-        return this.args.docsText ?? 'Read guide';
+        return this.args.docsText ?? this.intl.t('table.empty-state.read-guide');
     }
 
     get docsTitle() {
         /* istanbul ignore next -- `title` always returns a string, so it is never nullish */
-        return this.args.docsTitle ?? this.title ?? 'Documentation';
+        return this.args.docsTitle ?? this.title ?? this.intl.t('table.empty-state.documentation');
     }
 
     get docsSource() {

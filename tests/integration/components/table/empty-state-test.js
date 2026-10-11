@@ -16,12 +16,19 @@ class StubDocsPanelService extends Service {
     }
 }
 
+class StubIntlService extends Service {
+    t(key) {
+        return key;
+    }
+}
+
 module('Integration | Component | table/empty-state', function (hooks) {
     setupRenderingTest(hooks);
     setupWindowMock(hooks);
 
     hooks.beforeEach(function () {
         this.owner.register('service:docs-panel', StubDocsPanelService);
+        this.owner.register('service:intl', StubIntlService);
     });
 
     test('it renders a centered empty state with actions', async function (assert) {
@@ -64,7 +71,7 @@ module('Integration | Component | table/empty-state', function (hooks) {
     test('with no title of its own it says there are no records yet', async function (assert) {
         await render(hbs`<Table::EmptyState @icon="truck" />`);
 
-        assert.dom('.next-table-empty-state-title').hasText('No records yet');
+        assert.dom('.next-table-empty-state-title').hasText('table.empty-state.no-records-yet');
     });
 
     // Host apps that do not install the docs panel get a service without an `open` method; the
@@ -164,7 +171,7 @@ module('Integration | Component | table/empty-state', function (hooks) {
         // Every other docs case passes explicit text, title and source.
         await render(hbs`<Table::EmptyState @title="Add your first vehicle" @docsSlug="fleet-ops/vehicles" />`);
 
-        assert.dom('.next-table-empty-state-docs-action').hasText('Read guide', 'the default link text');
+        assert.dom('.next-table-empty-state-docs-action').hasText('table.empty-state.read-guide', 'the default link text');
 
         await click('.next-table-empty-state-docs-action');
 
